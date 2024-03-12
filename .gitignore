@@ -152,9 +152,10 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
-
+#IDE
 .idea/
 .vscode/
 
 # папки со статикой и медиа
 store/media/
+migrations/
