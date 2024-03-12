@@ -25,5 +25,4 @@ class CustomUserAdmin(UserAdmin):
         "first_name",
         "last_name",
     )
-    empty_value_display = "-пусто-"
     ordering = ("-id",)
