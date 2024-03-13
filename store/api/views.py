@@ -1,9 +1,13 @@
-from products.models import Category, Product, SubCategory
+from products.models import Category, Product, ShoppingCart
+from rest_framework import status
+from rest_framework.decorators import action
 from rest_framework.mixins import ListModelMixin
-from rest_framework.viewsets import GenericViewSet
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
 from .pagination import CustomPagination
-from .serializers import CategorySerializer, ProductSerializer, SubCategorySerializer
+from .serializers import CartSerializer, CategorySerializer, ProductSerializer
 
 
 class ListViewSet(ListModelMixin, GenericViewSet):
@@ -22,15 +26,35 @@ class CategoryViewSet(ListViewSet):
     serializer_class = CategorySerializer
 
 
-class SubCategoryViewSet(ListViewSet):
-    """Представление для модели SubCategory."""
-
-    queryset = SubCategory.objects.all()
-    serializer_class = SubCategorySerializer
-
-
 class ProductViewSet(ListViewSet):
     """Представление для модели Product."""
 
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+
+
+class ShoppingCartViewSet(ModelViewSet):
+    """Представление для модели ShoppingCart."""
+
+    serializer_class = CartSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        """
+        Возвращает корзину текущего пользователя.
+        """
+        return ShoppingCart.objects.filter(user=self.request.user)
+
+    def perform_destroy(self, instance):
+        instance.cartitems.all().delete()
+        instance.delete()
+
+    @action(detail=True, methods=["post"])
+    def clear(self, request, *args, **kwargs):
+        """
+        Очищает корзину текущего пользователя.
+        """
+        cart = self.get_object()
+        cart.cart_items.all().delete()
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
