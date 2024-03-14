@@ -1,30 +1,9 @@
-from products.models import (
-    Category,
-    Product,
-    ShoppingCart,
-    ShoppingCartItems,
-    SubCategory,
-)
+from products.models import Category, Product, ShoppingCart, ShoppingCartItems
 from rest_framework.serializers import (
     ModelSerializer,
     SerializerMethodField,
     StringRelatedField,
 )
-
-
-class SubCategorySerializer(ModelSerializer):
-    """
-    Сериализатор для вывода информации о категориях и подкатегориях в ProductSerializer.
-    """
-
-    category = StringRelatedField(read_only=True)
-
-    class Meta:
-        model = SubCategory
-        fields = [
-            "name",
-            "category",
-        ]
 
 
 class CategorySerializer(ModelSerializer):
@@ -45,7 +24,8 @@ class CategorySerializer(ModelSerializer):
 class ProductSerializer(ModelSerializer):
     """Сериализатор для модели Product."""
 
-    subcategory = SubCategorySerializer(read_only=True)
+    category = StringRelatedField(source="subcategory.category.name")
+    subcategory = StringRelatedField(source="subcategory.name")
 
     class Meta:
         model = Product
@@ -57,6 +37,7 @@ class ProductSerializer(ModelSerializer):
             "image_large",
             "price",
             "subcategory",
+            "category",
         ]
 
 
