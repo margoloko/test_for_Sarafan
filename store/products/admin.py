@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Category, Product, SubCategory
+from .models import Category, Product, ShoppingCart, ShoppingCartItems, SubCategory
 
 
 @admin.register(Category)
@@ -38,3 +38,13 @@ class ProductAdmin(admin.ModelAdmin):
         "price",
         "subcategory",
     )
+
+
+@admin.register(ShoppingCart)
+class ShoppingCartAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(ShoppingCartItems)
+class ShoppingCartItemsAdmin(admin.ModelAdmin):
+    pass
