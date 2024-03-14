@@ -11,13 +11,13 @@ class Category(models.Model):
         upload_to="media/categories/", help_text="Изображение категории"
     )
 
+    def __str__(self):
+        return self.name
+
     class Meta:
         verbose_name = "Категория"
         verbose_name_plural = "Категории"
         ordering = ["name"]
-
-    def __str__(self):
-        return self.name
 
 
 class SubCategory(models.Model):
@@ -32,13 +32,13 @@ class SubCategory(models.Model):
         Category, related_name="subcategories", on_delete=models.CASCADE
     )
 
+    def __str__(self):
+        return self.name
+
     class Meta:
         verbose_name = "Подкатегория"
         verbose_name_plural = "Подкатегории"
         ordering = ["name"]
-
-    def __str__(self):
-        return self.name
 
 
 class Product(models.Model):
@@ -69,13 +69,13 @@ class Product(models.Model):
         verbose_name="Подкатегория продукта",
     )
 
+    def __str__(self):
+        return self.name
+
     class Meta:
         verbose_name = "Продукт"
         verbose_name_plural = "Продукты"
         ordering = ["name"]
-
-    def __str__(self):
-        return self.name
 
 
 class ShoppingCart(models.Model):
@@ -84,9 +84,17 @@ class ShoppingCart(models.Model):
     user = models.OneToOneField(
         User, on_delete=models.CASCADE, related_name="shopping_cart"
     )
+    product = models.ManyToManyField(
+        Product,
+        through="ShoppingCartItems",
+        related_name="cart",
+    )
 
+    def __str__(self):
+        return f"Корзина товаров {self.user}"
 
-# product = models.ManyToManyField(Product, through="ShoppingCartItems")
+    class Meta:
+        verbose_name = "Корзина"
 
 
 class ShoppingCartItems(models.Model):
@@ -98,8 +106,5 @@ class ShoppingCartItems(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
 
-    def get_cost(self):
-        """
-        Возвращает стоимость одного элемента корзины.
-        """
-        return self.product.price * self.quantity
+    def __str__(self):
+        return f"{self.product.name}: {self.quantity} шт."
