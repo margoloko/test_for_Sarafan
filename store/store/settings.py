@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     "users.apps.UsersConfig",
     "products.apps.ProductsConfig",
     "api.apps.ApiConfig",
+    "drf_yasg",
 ]
 
 MIDDLEWARE = [
