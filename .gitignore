@@ -152,10 +152,13 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
-#IDE
+# IDE
 .idea/
 .vscode/
 
 # папки со статикой и медиа
 store/media/
 migrations/
+
+# линтеры
+.ruff_cache/
