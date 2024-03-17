@@ -34,7 +34,7 @@ Django проект магазина продуктов.
 git clone git@github.com:margoloko/test_for_Sarafan.git
 ```
 
-Перейдите в папку с проектом recruitment-process-back, установите и запустите виртуальное окружение.
+Перейдите в папку с проектом store, установите и запустите виртуальное окружение.
 
 ```sh
 python -m venv venv
